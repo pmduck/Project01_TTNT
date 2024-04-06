@@ -114,7 +114,12 @@ def main():
         draw_map(screen, map_matrix)
         draw_obstacles(screen, obstacles)
          # Define start and end points
-        start = (1, 1)  # Example start point
+        
+        for i in range(len(map_matrix)):
+            for j in range(len(map_matrix[0])):
+                if map_matrix[i][j] == 3:
+                    start = (i, j)  # Example start point
+        
         end = (size[0]-2, size[1]-2)  # Example end point
 
         # Find path using A*
