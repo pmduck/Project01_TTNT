@@ -1,6 +1,7 @@
 import pygame
 import heapq
 import math
+import time
 # Màu sắc
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
@@ -37,7 +38,7 @@ def draw_map(screen, map_matrix):
                 pygame.draw.rect(screen, BLACK, rect, BORDER_SIZE)  # Vẽ viền màu đen
                 if map_matrix[i][j] == 1:  # Tường
                     pygame.draw.rect(screen, BLACK, rect)
-                elif map_matrix[i][j] == 2:  # Người giấu
+                elif map_matrix[i][j] == 2:  # Người trốn
                     pygame.draw.rect(screen, GREEN, rect)
                 elif map_matrix[i][j] == 3:  # Người tìm kiếm
                     pygame.draw.rect(screen, RED, rect)
@@ -59,10 +60,6 @@ def astar(map_matrix, start, end):
 
     while heap:
         _, current = heapq.heappop(heap)
-        if current == end:
-            found = True
-            break
-
         for neighbor in get_neighbors(map_matrix, current):
             tentative_g_score = g_scores[current] + 1
             if neighbor not in g_scores or tentative_g_score < g_scores[neighbor]:
@@ -70,6 +67,10 @@ def astar(map_matrix, start, end):
                 f_score = tentative_g_score + heuristic(neighbor, end)
                 heapq.heappush(heap, (f_score, neighbor))
                 parent[neighbor] = current
+
+        if current == end:
+            found = True
+            break
 
     if found:
         path = []
@@ -80,6 +81,7 @@ def astar(map_matrix, start, end):
         path.reverse()
         return path
     else:
+        print('No path found')
         return None
 
 # Heuristic function (Euclidean distance)
@@ -118,13 +120,14 @@ def main():
         for i in range(len(map_matrix)):
             for j in range(len(map_matrix[0])):
                 if map_matrix[i][j] == 3:
-                    start = (i, j)  # Example start point
-        
-        end = (size[0]-2, size[1]-2)  # Example end point
+                    start = (i, j)  
 
+        for i in range(len(map_matrix)):
+            for j in range(len(map_matrix[0])):
+                if map_matrix[i][j] == 2:
+                    end = (i, j-1) 
         # Find path using A*
         path = astar(map_matrix, start, end)
-
                 # Draw the path on the screen
         if path:
             for node in path:
