@@ -216,11 +216,30 @@ def main():
     # Run the A* search algorithm
     path = a_star_search(maze, src, dest)
 
+    point = 10
+
+    for pat in path:
+        p1,p2 = pat
+        point = point - 1 
+        print("Point - 1: ",point)
+        for pair in dest1:
+            x, y = pair
+            if x == p1 and y == p2:
+                point = point + 20
+                print("Fiding hider bonus + 20: ",point)
+    print ("Total Point", point)
+    if point >= 0:
+        print ("You Win")
+    else:
+        print ("You Lose")
+
+
     if path:
     # Draw the maze
         screen = draw_maze(maze,src1,dest1)
     # Draw the path found by A* algorithm
         draw_path(path, maze, screen)
+
 
 if __name__ == '__main__':
     main()

@@ -2,6 +2,7 @@ import math
 import heapq
 import pygame
 import sys
+import time
 
 # Define colors
 WHITE = (255, 255, 255)
@@ -41,7 +42,7 @@ def read_input_from_file(filename):
                 row[j] = 0
     return maze, hider_positions, seeker_position
 # Ví dụ sử dụng hàm
-maze, dest, src = read_input_from_file('input_level_2.txt')
+maze, dest, src = read_input_from_file('input_level_4.txt')
 ROW = len(maze)
 COL = len(maze[0])
  
@@ -59,7 +60,7 @@ def is_destination(row, col, dest):
  
 # Calculate the heuristic value of a cell (Euclidean distance to destination)
 def calculate_h_value(row, col, dest):
-    return ((row - dest[0]) ** 2 + (col - dest[1]) ** 2) ** 0.5
+    return math.sqrt((row - dest[0]) ** 2 + (col - dest[1]) ** 2)
  
 # Trace the path from source to destination
 def trace_path(cell_details, dest):
@@ -173,15 +174,10 @@ def a_star_search(grid, src, destinations):
                             cell_details[new_i][new_j].h = h_new
                             cell_details[new_i][new_j].parent_i = i
                             cell_details[new_i][new_j].parent_j = j
-
             if found_dest:
                 a = dest
                 break
-
-        # If the destination is not found after visiting all cells
-        #if not found_dest:
-        #    print("Failed to find the destination cell")
-
+        print("Failed to find the destination cell")
     return paths
 
 
@@ -246,7 +242,11 @@ def main():
     print("Hider positions:", dest)
     print("Seeker position:", src)
 
+    start_time = time.time()
+
     paths = a_star_search(maze, src, dest)
+    execution_time = time.time() - start_time
+    print("Thời gian tìm đường: ", execution_time, "giây")
     
     path2 = []
     for idx, path in enumerate(paths):
@@ -267,6 +267,33 @@ def main():
     print("dest2", dest2)
     src2 = [src]
     print("src2", src2)
+
+    points = 11
+    TOTAL = 0
+    found_destinations = []  # Danh sách để theo dõi các điểm đích đã được tìm thấy
+
+    for path in paths:
+        points = TOTAL
+        for point in path:
+            p1, p2 = point
+            points -= 1
+            first_element = path[0]
+            s1, s2 = first_element
+            found = False  # Biến này để kiểm tra xem điểm đích đã được tìm thấy trước đó chưa
+            for pair in dest2:
+                x, y = pair
+                if x == p1 and y == p2 and s1 != x and s2 != y and pair not in found_destinations:
+                    points += 20
+                    found_destinations.append(pair)  # Thêm điểm đích vào danh sách đã tìm thấy
+                    found = True
+                    print("Fiding hider bonus + 20:", points)
+        TOTAL = points - 1
+    if TOTAL >= 0:
+        print ("You Win")
+    else:
+        print ("You Lose")    
+
+   
 
     screen = draw_maze(maze, src2, dest2)
     draw_path(path2, maze, screen)
