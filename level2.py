@@ -35,14 +35,14 @@ def read_input_from_file(filename):
         maze.append(row)
         for j, cell in enumerate(row):
             if cell == 2:  # Hider
-                hider_positions.append((i - 1, j))  # Thêm vị trí của hider vào danh sách
+                hider_positions.append((i - 1, j)) 
                 row[j] = 0
             elif cell == 3:  # Seeker
                 seeker_position = (i - 1, j)
                 row[j] = 0
     return maze, hider_positions, seeker_position
-# Ví dụ sử dụng hàm
-maze, dest, src = read_input_from_file('input_level_4.txt')
+
+maze, dest, src = read_input_from_file('input_level_9.txt')
 ROW = len(maze)
 COL = len(maze[0])
  
@@ -273,10 +273,10 @@ def main():
     found_destinations = []  # Danh sách để theo dõi các điểm đích đã được tìm thấy
 
     for path in paths:
-        points = TOTAL
         for point in path:
             p1, p2 = point
             points -= 1
+            print(points)
             first_element = path[0]
             s1, s2 = first_element
             found = False  # Biến này để kiểm tra xem điểm đích đã được tìm thấy trước đó chưa
