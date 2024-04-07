@@ -81,7 +81,6 @@ def astar(map_matrix, start, end):
         path.reverse()
         return path
     else:
-        print('No path found')
         return None
 
 # Heuristic function (Euclidean distance)
