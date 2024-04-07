@@ -90,7 +90,7 @@ def heuristic(node, end):
 # Get neighboring nodes
 def get_neighbors(map_matrix, node):
     neighbors = []
-    directions = [(1, 0), (-1, 0), (0, 1), (0, -1)]  # Down, Up, Right, Left
+    directions = [(1, 0), (-1, 0), (0, 1), (0, -1)]  # Xuống, Lên, Phải, Trái
     for dx, dy in directions:
         x, y = node[0] + dx, node[1] + dy
         if 0 <= x < len(map_matrix) and 0 <= y < len(map_matrix[0]) and map_matrix[x][y] == 0:
@@ -114,8 +114,8 @@ def main():
         screen.fill(WHITE)
         draw_map(screen, map_matrix)
         draw_obstacles(screen, obstacles)
-         # Define start and end points
-        
+
+         # Xác định điểm kết thúc và điểm bắt đầu
         for i in range(len(map_matrix)):
             for j in range(len(map_matrix[0])):
                 if map_matrix[i][j] == 3:
@@ -125,9 +125,9 @@ def main():
             for j in range(len(map_matrix[0])):
                 if map_matrix[i][j] == 2:
                     end = (i, j-1) 
-        # Find path using A*
+        # Tìm path dùng thuật toán A*
         path = astar(map_matrix, start, end)
-                # Draw the path on the screen
+                # Vẽ đường đi trên mà hình
         if path:
             for node in path:
                 rect = pygame.Rect(node[1] * CELL_SIZE, node[0] * CELL_SIZE, CELL_SIZE, CELL_SIZE)
